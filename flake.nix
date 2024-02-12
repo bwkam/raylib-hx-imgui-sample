@@ -29,8 +29,8 @@
                         "sha256-bslVgevpwUPze+2DHZdecogVnyK2vk3JiodbZv6Wt48=";
                     };
 
-                    nativeBuildInputs = [ self.premake5 self.raylib self.imgui ];
-                    # buildInputs = [self.imgui];
+                    nativeBuildInputs = [ self.premake5 ];
+                    buildInputs = [self.imgui self.raylib];
                     postPatch = ''
                       substituteInPlace ./*.cpp ./*.h ./examples/*.cpp ./examples/*.h --replace '#include "imgui.h"' '#include <imgui/imgui.h>'
                     '';

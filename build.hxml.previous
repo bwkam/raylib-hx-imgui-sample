@@ -1,0 +1,6 @@
+-cp src
+-cpp bin
+-lib raylib-hx
+-main Main.hx
+-D shared_libs=/nix/store/bkdagj6pflzfdyd95f9lmca8naff7063-raylib-4.5.0/
+# -D shared_libs=/home/bwkam/Documents/dev/haxe-projects/raylib/rlImGui/

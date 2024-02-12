@@ -17,7 +17,7 @@
               overlays = [
                 nixgl.overlay
 
-                (self: super: {
+                (self: super:  {
                   rlImGui = super.stdenv.mkDerivation {
                     name = "rlImGui";
                     version = "latest";
@@ -33,6 +33,14 @@
                     buildInputs = [self.imgui self.raylib];
                     postPatch = ''
                       substituteInPlace ./*.cpp ./*.h ./examples/*.cpp ./examples/*.h --replace '#include "imgui.h"' '#include <imgui/imgui.h>'
+                      substituteInPlace ./premake5.lua --replace 'includedirs {"./", "imgui", "imgui-master" }' 'includedirs {"./", "${self.imgui}/include/imgui/" }' 
+                      substituteInPlace ./premake5.lua --replace 'includedirs { "rlImGui", "imgui", "imgui-master"}' 'includedirs { "${self.rlImGui}", "${self.imgui}/include/imgui/"}'
+                      substituteInPlace ./premake5.lua --replace '["ImGui Files"] = { "imgui/*.h","imgui/*.cpp", "imgui-master/*.h","imgui-master/*.cpp" }' \
+                        ["ImGui Files"] = { "${self.imgui}/include/imgui/*.h","${self.imgui}/include/imgui/*.cpp" },
+                      substituteInPlace ./premake5.lua --replace 'files {"imgui-master/*.h", "imgui-master/*.cpp", "imgui/*.h", "imgui/*.cpp", "*.cpp", "*.h", "extras/**.h"}' \
+                        'files {"${self.imgui}/include/imgui/*.h", "${self.imgui}/include/imgui/*.cpp", "*.cpp", "*.h", "extras/**.h"}'
+
+                      cat ./premake5.lua
                     '';
                     # postFixup =
                     #   "mkdir -p $out/include/ && cp ./*.h $out/include/ && mkdir -p $out/include/extras/ && cp ./extras/* $out/include/extras/";
